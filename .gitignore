@@ -1,4 +1,6 @@
 client/node_modules
 truffle/node_modules
 
+client/src/contracts
+
 .idea
