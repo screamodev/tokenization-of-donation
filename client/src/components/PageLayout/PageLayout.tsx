@@ -1,15 +1,18 @@
 import { FC, ReactNode } from 'react';
-import { Footer } from '../Footer/Footer';
 import { Header } from '../Header/Header';
+import './pageLayout.scss';
 
 interface PageLayoutProps {
     children: ReactNode;
 }
 
 export const PageLayout: FC<PageLayoutProps> = ({ children }) => (
-  <>
-    <Header />
-    {children}
-    <Footer />
-  </>
+  <div className="page-layout">
+    <div className="page-layout-container">
+      <Header />
+      <main className="page-layout-container-content">
+        {children}
+      </main>
+    </div>
+  </div>
 );
