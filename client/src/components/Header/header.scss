@@ -1,5 +1,5 @@
 .header {
-  @apply flex justify-between px-4 h-full max-h-20;
+  @apply flex sticky bg-neutral-900 top-0 z-50 w-full h-full justify-between px-4 max-h-20;
 
   &-logo {
     @apply flex p-2 cursor-pointer;
@@ -22,7 +22,11 @@
   }
 
   &-authorization {
-    @apply flex items-center p-2;
+    @apply flex items-center justify-end p-2;
+
+    &-account-address {
+      @apply w-24 truncate font-bold;
+    }
 
     &-sign-up {
       @apply mr-2;
