@@ -6,8 +6,8 @@
   @apply text-yellow-500;
 }
 
-input, textarea {
-  @apply border-[1px] text-neutral-800 border-yellow-500 border-r-4 py-2 px-4 my-2;
+input, textarea, select, option {
+  @apply border-[1px] text-neutral-800 border-yellow-500 border-r-4 rounded-lg py-2 px-4 my-2;
 }
 
 textarea {
