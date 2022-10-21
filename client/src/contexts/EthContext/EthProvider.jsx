@@ -4,19 +4,57 @@ import React, {
 import Web3 from 'web3';
 import { reducer, actions, initialState } from './state';
 import EthContext from './EthContext';
+import { filterCampaignInstance, getCampaignsAddresses } from './helpers/helpers';
 
 const CrowdfundingPlatform = require('../../contracts/CrowdfundingPlatform.json');
-// const CampaignContract = require('../../contracts/Campaign.json');
+const CampaignContract = require('../../contracts/Campaign.json');
 
 function EthProvider({ children }) {
   const [state, dispatch] = useReducer(reducer, initialState);
 
+  // create init adter refresh page
   const init = useCallback(async () => {
-    if (CrowdfundingPlatform) {
+    if (CrowdfundingPlatform && CampaignContract) {
       const web3 = new Web3(Web3.givenProvider || 'http://localhost:7545');
       const accounts = await web3.eth.requestAccounts();
-      // const networkID = await web3.eth.net.getId();
-      // const { abi } = CrowdfundingPlatform;
+      const networkID = await web3.eth.net.getId();
+
+      const { abi } = CrowdfundingPlatform;
+      const { abi: campaignAbi } = CampaignContract;
+
+      const { address } = CrowdfundingPlatform.networks[networkID];
+
+      const crowdfundingPlatformInstance = new web3.eth.Contract(abi, address);
+
+      const campaignsCount = await crowdfundingPlatformInstance
+        .methods.campaignsCount().call();
+
+      console.log(campaignsCount);
+
+      const campaigns = await (async function () {
+        if (!campaignsCount) {
+          return [];
+        }
+
+        const campaignsAddresses = await getCampaignsAddresses(
+          crowdfundingPlatformInstance,
+          campaignsCount,
+        );
+
+        const campaignsPending = campaignsAddresses
+          .map((campaign) => filterCampaignInstance(
+            web3,
+            campaignAbi,
+            campaign.targetContract,
+          ));
+
+        const campaignsPromisses = await Promise.all(campaignsPending);
+
+        return campaignsPromisses;
+      }());
+
+      console.log(campaigns);
+
       // let address; let
       //   contract;
       // try {
@@ -27,7 +65,13 @@ function EthProvider({ children }) {
       // }
       dispatch({
         type: actions.init,
-        data: { userAccount: accounts[0] },
+        data: {
+          web3,
+          campaignAbi,
+          userAccount: accounts[0],
+          crowdfundingPlatformInstance,
+          campaigns,
+        },
       });
     }
   }, []);
