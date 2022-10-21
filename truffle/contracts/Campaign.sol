@@ -4,6 +4,8 @@ import "./CrowdfundingPlatform.sol";
 
 contract Campaign {
     uint public id;
+    string public title;
+    string public description;
     uint public endsAt;
     uint public goal;
     uint public alreadyDonated;
@@ -14,8 +16,10 @@ contract Campaign {
 
     event donated(uint amount, address donater);
 
-    constructor(uint _id, uint _endsAt, uint _goal, address _organizer) {
+    constructor(uint _id, string memory _title, string memory _description, uint _endsAt, uint _goal, address _organizer) {
         id = _id;
+        title = _title;
+        description = _description;
         endsAt = _endsAt;
         goal = _goal;
         organizer = _organizer;

@@ -9,29 +9,30 @@ contract CrowdfundingPlatform {
         bool claimed;
     }
     mapping(uint => CrowdfundingCampaign) public campaigns;
-    uint private currentCampaignIndex;
+    uint public campaignsCount = 0;
     address public owner;
     uint constant CAMPAIGN_DURATION = 30 days;
 
-    event CampaignStarted(uint id, uint endsAt, uint goal, address organizer);
+    event CampaignStarted(uint id, Campaign newCampaignAddress, uint endsAt, uint goal, address organizer);
 
-    function start(uint _goal, uint _endsAt) external {
+    function startCampaign(string memory _title, string memory _description, uint _goal, uint _endsAt) external {
 
+        // require(bytes(title).length > 0 && bytes(description).length > 0);
         require(_goal > 0, "You must define goal of your campaign.");
         require(
             _endsAt <= block.timestamp + CAMPAIGN_DURATION &&
             _endsAt > block.timestamp
         );
 
-        currentCampaignIndex = currentCampaignIndex + 1;
+        campaignsCount = campaignsCount + 1;
 
-        Campaign newCampaign = new Campaign(currentCampaignIndex, _endsAt, _goal, msg.sender);
-        campaigns[currentCampaignIndex] = CrowdfundingCampaign({
+        Campaign newCampaign = new Campaign(campaignsCount, _title, _description, _endsAt, _goal, msg.sender);
+        campaigns[campaignsCount] = CrowdfundingCampaign({
         targetContract: newCampaign,
         claimed: false
         });
 
-        emit CampaignStarted(currentCampaignIndex, _endsAt, _goal, msg.sender);
+        emit CampaignStarted(campaignsCount, newCampaign, _endsAt, _goal, msg.sender);
     }
 
     function onClaimed(uint id) external {
