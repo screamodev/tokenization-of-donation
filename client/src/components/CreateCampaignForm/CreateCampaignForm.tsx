@@ -1,17 +1,44 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { useFormik } from 'formik';
 import './CreateCampaignForm.scss';
+import useEth from '../../contexts/EthContext/useEth';
+import { filterCampaignInstance } from '../../contexts/EthContext/helpers/helpers';
+import { actions } from '../../contexts/EthContext';
 
 export const CreateCampaignForm: FC = () => {
+  const {
+    state: {
+      web3, campaignAbi, crowdfundingPlatformInstance, userAccount,
+    }, dispatch,
+  } = useEth();
+
   const formik = useFormik({
     initialValues: {
       title: '',
       description: '',
-      endAtDate: '',
-      requiredAmount: '',
+      campaignDuration: '2592000',
+      requiredAmount: '1',
     },
-    onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
+    onSubmit: async ({
+      title, description, campaignDuration, requiredAmount,
+    }) => {
+      const endAt = Math.floor(Date.now() / 1000) + +campaignDuration;
+      const ethToWei = web3.utils.toWei(`${requiredAmount}`, 'ether');
+
+      await crowdfundingPlatformInstance.methods
+        .startCampaign(title, description, ethToWei, endAt).send({ from: userAccount })
+        .then(async ({ events: { CampaignStarted: { returnValues } } }: any) => {
+          const campaign = await filterCampaignInstance(
+            web3,
+            campaignAbi,
+            returnValues[1],
+          );
+
+          dispatch({
+            type: actions.addCampaign,
+            data: campaign,
+          });
+        });
     },
   });
 
@@ -42,17 +69,17 @@ export const CreateCampaignForm: FC = () => {
           />
         </label>
 
-        <label htmlFor="endAtDate">
-          End date
-          <input
-            id="endAtDate"
-            className="date-input"
-            placeholder="dd-mm-yyyy"
-            name="endAtDate"
-            type="date"
+        <label htmlFor="campaignDuration">
+          Campaign duration
+          <select
+            name="campaignDuration"
+            value={formik.values.campaignDuration}
             onChange={formik.handleChange}
-            value={formik.values.endAtDate}
-          />
+          >
+            <option value="2592000">30 days</option>
+            <option value="3888000">45 days</option>
+            <option value="5184000">60 days</option>
+          </select>
         </label>
 
         <label htmlFor="requiredAmount">
