@@ -1,4 +1,5 @@
 import { FC } from 'react';
+import { Link } from 'react-router-dom';
 import useEth from '../../contexts/EthContext/useEth';
 import './header.scss';
 
@@ -19,9 +20,9 @@ export const Header: FC = () => {
       </div>
 
       <nav className="header-navbar">
-        <div className="header-navbar-item">Home</div>
-        <div className="header-navbar-item">Create Campaign</div>
-        <div className="header-navbar-item">About</div>
+        <Link to="/" className="header-navbar-item">Home</Link>
+        <Link to="/create-campaign" className="header-navbar-item">Create Campaign</Link>
+        <Link to="/about" className="header-navbar-item">About</Link>
       </nav>
 
       <div className="header-authorization">

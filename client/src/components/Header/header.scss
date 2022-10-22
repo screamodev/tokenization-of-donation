@@ -1,5 +1,5 @@
 .header {
-  @apply flex sticky bg-neutral-900 top-0 z-50 w-full h-full justify-between px-4 max-h-20;
+  @apply flex sticky bg-neutral-900 top-0 z-50 w-full h-full justify-between max-h-20;
 
   &-logo {
     @apply flex p-2 cursor-pointer;
