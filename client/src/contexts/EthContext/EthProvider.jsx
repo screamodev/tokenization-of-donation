@@ -24,6 +24,8 @@ function EthProvider({ children }) {
 
       const { address } = CrowdfundingPlatform.networks[networkID];
 
+      console.log(address);
+
       const crowdfundingPlatformInstance = new web3.eth.Contract(abi, address);
 
       const campaignsCount = await crowdfundingPlatformInstance
@@ -55,14 +57,6 @@ function EthProvider({ children }) {
 
       console.log(campaigns);
 
-      // let address; let
-      //   contract;
-      // try {
-      //   address = CrowdfundingPlatform.networks[networkID].address;
-      //   contract = new web3.eth.Contract(abi, address);
-      // } catch (err) {
-      //   console.error(err);
-      // }
       dispatch({
         type: actions.init,
         data: {
