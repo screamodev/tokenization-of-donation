@@ -11,18 +11,17 @@ contract CrowdfundingPlatform {
     mapping(uint => CrowdfundingCampaign) public campaigns;
     uint public campaignsCount = 0;
     address public owner;
-    uint constant CAMPAIGN_DURATION = 30 days;
+
+    uint constant CAMPAIGN_DURATION_SIXTY = 60 days;
 
     event CampaignStarted(uint id, Campaign newCampaignAddress, uint endsAt, uint goal, address organizer);
 
     function startCampaign(string memory _title, string memory _description, uint _goal, uint _endsAt) external {
 
         // require(bytes(title).length > 0 && bytes(description).length > 0);
+        require( _endsAt > block.timestamp);
+        require(_endsAt <= block.timestamp + CAMPAIGN_DURATION_SIXTY);
         require(_goal > 0, "You must define goal of your campaign.");
-        require(
-            _endsAt <= block.timestamp + CAMPAIGN_DURATION &&
-            _endsAt > block.timestamp
-        );
 
         campaignsCount = campaignsCount + 1;
 
@@ -43,5 +42,4 @@ contract CrowdfundingPlatform {
 
         targetCampaign.claimed = true;
     }
-
 }
