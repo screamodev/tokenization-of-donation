@@ -18,7 +18,8 @@ export const filterCampaignInstance = async (web3, abi, address) => {
     id: await campaignMethods.id().call(),
     title: await campaignMethods.title().call(),
     description: await campaignMethods.description().call(),
-    goal: await campaignMethods.goal().call(),
+    goal: web3.utils.fromWei(await campaignMethods.goal().call(), 'ether'),
+    alreadyDonated: web3.utils.fromWei(await campaignMethods.alreadyDonated().call(), 'ether'),
     endsAt: await campaignMethods.endsAt().call(),
     organizer: await campaignMethods.organizer().call(),
   };
