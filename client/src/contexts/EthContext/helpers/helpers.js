@@ -15,12 +15,13 @@ export const filterCampaignInstance = async (web3, abi, address) => {
     .eth.Contract(abi, address);
 
   return {
-    id: await campaignMethods.id().call(),
+    id: +await campaignMethods.id().call(),
     title: await campaignMethods.title().call(),
     description: await campaignMethods.description().call(),
-    goal: web3.utils.fromWei(await campaignMethods.goal().call(), 'ether'),
-    alreadyDonated: web3.utils.fromWei(await campaignMethods.alreadyDonated().call(), 'ether'),
-    endsAt: await campaignMethods.endsAt().call(),
+    goal: +web3.utils.fromWei(await campaignMethods.goal().call(), 'ether'),
+    alreadyDonated: +web3.utils.fromWei(await campaignMethods.alreadyDonated().call(), 'ether'),
+    endsAt: +await campaignMethods.endsAt().call(),
     organizer: await campaignMethods.organizer().call(),
+    donate: await campaignMethods.donate,
   };
 };

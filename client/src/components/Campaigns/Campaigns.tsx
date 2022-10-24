@@ -20,14 +20,17 @@ export const Campaigns: FC = () => {
               goal,
               alreadyDonated,
               endsAt,
+              donate,
             }: Campaign) => (
               <CampaignElement
+                id={id}
                 key={id}
                 title={title}
                 description={description}
-                goal={+goal}
-                alreadyDonated={+alreadyDonated}
-                endsAt={+endsAt}
+                goal={goal}
+                alreadyDonated={alreadyDonated}
+                endsAt={endsAt}
+                donate={donate}
               />
             ))}
           </div>

@@ -1,9 +1,10 @@
 export interface Campaign {
-    id: string;
+    id: number;
     title: string;
     description: string;
-    goal: string;
-    alreadyDonated: string;
-    endsAt: string;
+    goal: number;
+    alreadyDonated: number;
+    endsAt: number;
     organizer: string;
+    donate: () => any;
 }

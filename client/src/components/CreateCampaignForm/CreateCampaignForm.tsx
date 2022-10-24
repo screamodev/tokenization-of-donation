@@ -1,14 +1,17 @@
-import { FC, useEffect } from 'react';
+import { FC } from 'react';
 import { useFormik } from 'formik';
-import './CreateCampaignForm.scss';
 import useEth from '../../contexts/EthContext/useEth';
 import { filterCampaignInstance } from '../../contexts/EthContext/helpers/helpers';
 import { actions } from '../../contexts/EthContext';
+import './CreateCampaignForm.scss';
 
 export const CreateCampaignForm: FC = () => {
   const {
     state: {
-      web3, campaignAbi, crowdfundingPlatformInstance, userAccount,
+      web3,
+      campaignAbi,
+      crowdfundingPlatformInstance,
+      userAccount,
     }, dispatch,
   } = useEth();
 
@@ -20,7 +23,10 @@ export const CreateCampaignForm: FC = () => {
       requiredAmount: '1',
     },
     onSubmit: async ({
-      title, description, campaignDuration, requiredAmount,
+      title,
+      description,
+      campaignDuration,
+      requiredAmount,
     }) => {
       const endAt = Math.floor(Date.now() / 1000) + +campaignDuration;
       const ethToWei = web3.utils.toWei(`${requiredAmount}`, 'ether');
