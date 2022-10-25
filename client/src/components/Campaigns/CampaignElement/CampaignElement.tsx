@@ -1,8 +1,8 @@
-import React, { FC, useState } from 'react';
+import React, { FC } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ProgressBar } from '../../ProgressBar/ProgressBar';
 import { convertSecondsToDays } from '../../../utils/utils';
-import useEth from '../../../contexts/EthContext/useEth';
-import { actions } from '../../../contexts/EthContext';
+import { DonateButton } from '../../DonateButton/DonateButton';
 import './campaignElement.scss';
 
 interface CampaignElementProps {
@@ -24,39 +24,15 @@ export const CampaignElement: FC<CampaignElementProps> = ({
   endsAt,
   donate,
 }) => {
-  const {
-    state: {
-      web3,
-      userAccount,
-    }, dispatch,
-  } = useEth();
+  const navigate = useNavigate();
 
-  const [donationAmount, setDonationAmount] = useState('');
-  const [isDonateClicked, setIsDonateClicked] = useState(false);
-
-  const handleChangeDonate = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setDonationAmount(e.target.value);
-  };
-
-  const handleClickDonate = () => {
-    setIsDonateClicked(true);
-  };
-
-  const handleSendDonation = async (value: number) => {
-    await donate().send({ from: userAccount, value: web3.utils.toWei(`${value}`, 'ether') })
-      .then(({ events: { donated: { returnValues } } }: any) => {
-        const donatedAmount = +web3.utils.fromWei(returnValues[0], 'ether');
-        const fixedAmount = +donatedAmount.toFixed(3);
-
-        dispatch({
-          type: actions.donateFunds,
-          data: { id, donatedAmount: fixedAmount },
-        });
-      });
-  };
+  const navigateToCampaignPage = () => navigate(`/campaign/${id}`);
 
   return (
-    <div className="campaigns-element-item">
+    <div
+      onClick={navigateToCampaignPage}
+      className="campaigns-element-item"
+    >
       <div className="campaigns-element-item-image">some image</div>
       <div className="campaigns-element-item-content">
         <div className="campaigns-element-item-content-text">
@@ -74,32 +50,7 @@ export const CampaignElement: FC<CampaignElementProps> = ({
           <p className="campaigns-element-item-content-details-endsAt">{`${convertSecondsToDays(+endsAt)} days left`}</p>
         </div>
       </div>
-      {!isDonateClicked ? (
-        <button
-          className="campaigns-element-item-donate-button"
-          onClick={handleClickDonate}
-          type="button"
-        >
-          Donate
-        </button>
-      ) : (
-        <div className="campaigns-element-item-donate-funds">
-          <input
-            placeholder="Enter ETH amount"
-            className="campaigns-element-item-donate-funds-input"
-            type="number"
-            onChange={handleChangeDonate}
-            value={donationAmount}
-          />
-          <button
-            onClick={() => handleSendDonation(+donationAmount)}
-            className="campaigns-element-item-donate-funds-button"
-            type="button"
-          >
-            Send
-          </button>
-        </div>
-      )}
+      <DonateButton id={id} donate={donate} />
     </div>
   );
 };
