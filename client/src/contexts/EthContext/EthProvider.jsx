@@ -12,7 +12,6 @@ const CampaignContract = require('../../contracts/Campaign.json');
 function EthProvider({ children }) {
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  // create init adter refresh page
   const init = useCallback(async () => {
     if (CrowdfundingPlatform && CampaignContract) {
       const web3 = new Web3(Web3.givenProvider || 'http://localhost:7545');
@@ -79,6 +78,7 @@ function EthProvider({ children }) {
 
   useEffect(() => {
     if (window.ethereum) {
+      isConnected();
       const events = ['chainChanged', 'accountsChanged'];
       const handleChange = () => {
         init();
@@ -90,6 +90,13 @@ function EthProvider({ children }) {
       };
     }
   }, [init, CrowdfundingPlatform]);
+
+  const isConnected = async () => {
+    const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+    if (accounts.length) {
+      init();
+    }
+  };
 
   const connectWallet = () => {
     init();
