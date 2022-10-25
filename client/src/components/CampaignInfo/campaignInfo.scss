@@ -1,0 +1,35 @@
+.campaign-info-container {
+  @apply w-full p-6 bg-neutral-800 rounded;
+
+  &-content {
+    @apply flex flex-col;
+
+    &-title {
+      @apply flex justify-center mb-6;
+
+      h1 {
+        @apply text-xl font-bold;
+      }
+    }
+
+    &-info {
+      @apply flex flex-wrap my-2;
+
+      &-image {
+        @apply h-[350px] grow bg-neutral-900 m-4 text-center;
+      }
+
+      &-details {
+        @apply h-[220px] m-4 flex flex-col justify-between;
+      }
+
+      &-donate {
+        @apply h-12 ml-1 border-none hover:text-white hover:font-bold duration-150;
+      }
+
+      &-description {
+        @apply w-full p-4 text-gray-300 text-justify;
+      }
+    }
+  }
+}

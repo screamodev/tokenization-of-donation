@@ -5,7 +5,7 @@
     @apply flex p-2 cursor-pointer;
 
     &-icon {
-      @apply border-[1px] w-16 h-16 flex items-center justify-center p-2 mr-2 bg-black text-2xl font-bold border-white;
+      @apply border-[1px] w-16 h-16 flex items-center justify-center p-2 mr-2 bg-black text-2xl font-bold border-yellow-500 text-gray-300;
     }
 
     &-text {
