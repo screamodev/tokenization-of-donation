@@ -8,16 +8,18 @@ export const Header: FC = () => {
 
   return (
     <div className="header">
-      <div className="header-logo">
-        <div className="header-logo-icon">TOD</div>
-        <p className="header-logo-text">
-          Tokenization
-          <br />
-          Of
-          <br />
-          Donation
-        </p>
-      </div>
+      <Link to="/">
+        <div className="header-logo">
+          <div className="header-logo-icon">TOD</div>
+          <p className="header-logo-text">
+            Tokenization
+            <br />
+            Of
+            <br />
+            Donation
+          </p>
+        </div>
+      </Link>
 
       <nav className="header-navbar">
         <Link to="/" className="header-navbar-item">Home</Link>
