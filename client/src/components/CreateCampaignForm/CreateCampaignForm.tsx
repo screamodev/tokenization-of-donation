@@ -1,11 +1,14 @@
 import { FC } from 'react';
 import { useFormik } from 'formik';
+import { useNavigate } from 'react-router-dom';
 import useEth from '../../contexts/EthContext/useEth';
 import { filterCampaignInstance } from '../../contexts/EthContext/helpers/helpers';
 import { actions } from '../../contexts/EthContext';
 import './CreateCampaignForm.scss';
 
 export const CreateCampaignForm: FC = () => {
+  const navigate = useNavigate();
+
   const {
     state: {
       web3,
@@ -38,12 +41,17 @@ export const CreateCampaignForm: FC = () => {
             web3,
             campaignAbi,
             returnValues[1],
+            userAccount,
           );
 
           dispatch({
             type: actions.addCampaign,
             data: campaign,
           });
+
+          return campaign;
+        }).then(({ id }: {id: number }) => {
+          navigate(`/campaign/${id}`);
         });
     },
   });
