@@ -26,6 +26,7 @@ contract CrowdfundingPlatform {
         campaignsCount = campaignsCount + 1;
 
         Campaign newCampaign = new Campaign(campaignsCount, _title, _description, _endsAt, _goal, msg.sender);
+
         campaigns[campaignsCount] = CrowdfundingCampaign({
         targetContract: newCampaign,
         claimed: false
