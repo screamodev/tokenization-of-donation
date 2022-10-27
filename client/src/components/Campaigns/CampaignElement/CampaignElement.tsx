@@ -10,7 +10,8 @@ interface CampaignElementProps {
     title: string;
     description: string;
     goal: number;
-    alreadyDonated: number
+    alreadyDonated: number;
+    claimed: boolean;
     endsAt: number;
     donate: () => any;
 }
@@ -20,6 +21,7 @@ export const CampaignElement: FC<CampaignElementProps> = ({
   title,
   description,
   goal,
+  claimed,
   alreadyDonated,
   endsAt,
   donate,
@@ -50,7 +52,9 @@ export const CampaignElement: FC<CampaignElementProps> = ({
           <p className="campaigns-element-item-content-details-endsAt">{`${convertSecondsToDays(+endsAt)} days left`}</p>
         </div>
       </div>
-      <DonateButton id={id} donate={donate} />
+      {claimed
+        ? <div>Campaign Over. Organizer withdrowed the funds. </div>
+        : <DonateButton id={id} donate={donate} />}
     </div>
   );
 };
