@@ -19,6 +19,7 @@ export const Campaigns: FC = () => {
               description,
               goal,
               alreadyDonated,
+              claimed,
               endsAt,
               donate,
             }: Campaign) => (
@@ -29,6 +30,7 @@ export const Campaigns: FC = () => {
                 description={description}
                 goal={goal}
                 alreadyDonated={alreadyDonated}
+                claimed={claimed}
                 endsAt={endsAt}
                 donate={donate}
               />

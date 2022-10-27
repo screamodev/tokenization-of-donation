@@ -20,7 +20,15 @@
       }
 
       &-details {
-        @apply h-[220px] m-4 flex flex-col justify-between;
+        @apply h-[380px] m-4 flex flex-col justify-between;
+
+        &-buttons {
+          @apply flex flex-col;
+
+          hr {
+            @apply w-full border-yellow-500 my-6;
+          }
+        }
       }
 
       &-donate {
@@ -29,6 +37,10 @@
 
       &-description {
         @apply w-full p-4 text-gray-300 text-justify;
+      }
+
+      &-claim {
+        @apply w-full flex justify-center;
       }
     }
   }

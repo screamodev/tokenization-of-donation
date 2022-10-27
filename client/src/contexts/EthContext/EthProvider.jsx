@@ -23,14 +23,10 @@ function EthProvider({ children }) {
 
       const { address } = CrowdfundingPlatform.networks[networkID];
 
-      console.log(address);
-
       const crowdfundingPlatformInstance = new web3.eth.Contract(abi, address);
 
       const campaignsCount = await crowdfundingPlatformInstance
         .methods.campaignsCount().call();
-
-      console.log(campaignsCount);
 
       const campaigns = await (async function () {
         if (!campaignsCount) {
@@ -47,6 +43,7 @@ function EthProvider({ children }) {
             web3,
             campaignAbi,
             campaign.targetContract,
+            accounts[0],
           ));
 
         const campaignsPromisses = await Promise.all(campaignsPending);

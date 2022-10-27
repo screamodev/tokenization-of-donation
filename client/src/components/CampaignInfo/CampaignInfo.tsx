@@ -5,14 +5,46 @@ import { ProgressBar } from '../ProgressBar/ProgressBar';
 import { DonateButton } from '../DonateButton/DonateButton';
 import { Campaign } from '../../interfaces/interface';
 import { convertSecondsToDays } from '../../utils/utils';
+import { RefundButton } from '../RefundButton/RefundButton';
 import './campaignInfo.scss';
+import { ClaimButton } from '../ClaimButton/ClaimButton';
+
+const initialCampaign = {
+  id: 0,
+  title: '',
+  description: '',
+  goal: 0,
+  alreadyDonated: 0,
+  endsAt: 0,
+  organizer: '',
+  claimed: false,
+  currentUserDonations: 0,
+  donate: () => ({}),
+  refundDonation: () => ({}),
+  claim: () => ({}),
+};
 
 export const CampaignInfo: FC = () => {
-  const { state: { campaigns } } = useEth();
+  const { state: { campaigns, userAccount } } = useEth();
 
   const { id: campaignId } = useParams();
 
-  const [currentCampaign, setCurrentCampaign] = useState<Campaign>();
+  const [currentCampaign, setCurrentCampaign] = useState<Campaign>(initialCampaign);
+
+  const {
+    id,
+    title,
+    description,
+    goal,
+    alreadyDonated,
+    endsAt,
+    organizer,
+    claimed,
+    currentUserDonations,
+    donate,
+    refundDonation,
+    claim,
+  } = currentCampaign;
 
   const fetchPlaylistSongs = () => {
     const foundedCampaign = campaigns
@@ -32,31 +64,59 @@ export const CampaignInfo: FC = () => {
         <div className="campaign-info-container">
           <div className="campaign-info-container-content">
             <div className="campaign-info-container-content-title">
-              <h1>{currentCampaign.title}</h1>
+              <h1>{title}</h1>
             </div>
             <div className="campaign-info-container-content-info">
               <div className="campaign-info-container-content-info-image">Image</div>
               <div className="campaign-info-container-content-info-details">
                 <ProgressBar
-                  goal={currentCampaign.goal}
-                  alreadyDonated={currentCampaign.alreadyDonated}
+                  goal={goal}
+                  alreadyDonated={alreadyDonated}
                 />
                 <div className="campaign-info-container-content-info-details-amount">
-                  {`${currentCampaign.alreadyDonated} ETH donated of ${currentCampaign?.goal} ETH goal`}
+                  {`${alreadyDonated} ETH donated of ${goal} ETH goal`}
                 </div>
-                <div className="campaign-info-container-content-info-details-donaters">
-                  Donaters count: qwerty
+                <div>
+                  <b>
+                    You donated
+                    {' '}
+                    {currentUserDonations}
+                    {' '}
+                    ETH.
+                  </b>
                 </div>
                 <div className="campaign-info-container-content-info-details-days">
-                  {`${convertSecondsToDays(currentCampaign.endsAt)} days to go`}
+                  {`${convertSecondsToDays(endsAt)} days to go`}
                 </div>
-                <DonateButton
-                  id={currentCampaign.id}
-                  donate={currentCampaign.donate}
-                />
+                {claimed
+                  ? <div>Campaign Over. Organizer withdrowed the funds. </div>
+                  : (
+                    <div className="campaign-info-container-content-info-details-buttons">
+                      <DonateButton
+                        id={id}
+                        donate={donate}
+                      />
+                      <hr />
+                      <RefundButton
+                        id={id}
+                        refundDonation={refundDonation}
+                        disabled={!currentUserDonations}
+                      />
+                    </div>
+                  )}
               </div>
               <div className="campaign-info-container-content-info-description">
-                {currentCampaign.description}
+                {description}
+              </div>
+              <div className="campaign-info-container-content-info-claim">
+                {userAccount === organizer && !claimed
+                    && (
+                    <ClaimButton
+                      id={id}
+                      claim={claim}
+                      disabled={alreadyDonated < goal}
+                    />
+                    )}
               </div>
             </div>
           </div>

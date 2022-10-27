@@ -23,10 +23,12 @@ export const DonateButton: FC<DonateButtonProps> = ({
   const [isDonateClicked, setIsDonateClicked] = useState(false);
 
   const handleChangeDonate = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.stopPropagation();
     setDonationAmount(e.target.value);
   };
 
-  const handleClickDonate = () => {
+  const handleClickDonate = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
     setIsDonateClicked(true);
   };
 
@@ -59,11 +61,15 @@ export const DonateButton: FC<DonateButtonProps> = ({
             placeholder="Enter ETH amount"
             className="donate-funds-input"
             type="number"
+            onClick={(e) => e.stopPropagation()}
             onChange={handleChangeDonate}
             value={donationAmount}
           />
           <button
-            onClick={() => handleSendDonation(+donationAmount)}
+            onClick={(e) => {
+              e.stopPropagation();
+              return handleSendDonation(+donationAmount);
+            }}
             className="donate-funds-button"
             type="button"
           >

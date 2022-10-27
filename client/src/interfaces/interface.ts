@@ -6,5 +6,9 @@ export interface Campaign {
     alreadyDonated: number;
     endsAt: number;
     organizer: string;
+    claimed: boolean;
+    currentUserDonations: number;
     donate: () => any;
+    refundDonation: () => any;
+    claim: () => any;
 }

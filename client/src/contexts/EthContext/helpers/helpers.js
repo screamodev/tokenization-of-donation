@@ -10,9 +10,9 @@ export const getCampaignsAddresses = async (contractInstance, campaignsCount) =>
   return campaignsAddressesPromisses;
 };
 
-export const filterCampaignInstance = async (web3, abi, address) => {
+export const filterCampaignInstance = async (web3, abi, contractAddress, userAccount) => {
   const { methods: campaignMethods } = new web3
-    .eth.Contract(abi, address);
+    .eth.Contract(abi, contractAddress);
 
   return {
     id: +await campaignMethods.id().call(),
@@ -22,6 +22,10 @@ export const filterCampaignInstance = async (web3, abi, address) => {
     alreadyDonated: +web3.utils.fromWei(await campaignMethods.alreadyDonated().call(), 'ether'),
     endsAt: +await campaignMethods.endsAt().call(),
     organizer: await campaignMethods.organizer().call(),
+    claimed: await campaignMethods.claimed().call(),
+    currentUserDonations: +web3.utils.fromWei(await campaignMethods.donations(userAccount).call(), 'ether'),
     donate: await campaignMethods.donate,
+    refundDonation: await campaignMethods.refundDonation,
+    claim: await campaignMethods.claim,
   };
 };

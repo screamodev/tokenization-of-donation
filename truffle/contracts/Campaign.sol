@@ -1,5 +1,6 @@
 //SPDX-License-Identifier: MIT
 pragma solidity 0.8.14;
+
 import "./CrowdfundingPlatform.sol";
 
 contract Campaign {
@@ -11,10 +12,11 @@ contract Campaign {
     uint public alreadyDonated;
     address public organizer;
     CrowdfundingPlatform parentContract;
-    bool claimed;
-    mapping(address => uint) donations;
+    bool public claimed;
+    mapping(address => uint) public donations;
 
     event donated(uint amount, address donater);
+    event refundedAmount(uint amount, address refunder);
 
     constructor(uint _id, string memory _title, string memory _description, uint _endsAt, uint _goal, address _organizer) {
         id = _id;
@@ -34,6 +36,18 @@ contract Campaign {
         donations[msg.sender] += msg.value;
 
         emit donated(msg.value, msg.sender);
+    }
+
+    function refundDonation(uint _amount) external {
+        require(block.timestamp <= endsAt);
+        require(_amount <= donations[msg.sender]);
+
+        donations[msg.sender] -= _amount;
+        alreadyDonated -= _amount;
+
+        payable(msg.sender).transfer(_amount);
+
+        emit refundedAmount(_amount, msg.sender);
     }
 
     function claim() external {

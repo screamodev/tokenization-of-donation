@@ -35,6 +35,8 @@
         "react/jsx-no-constructed-context-values": "off",
         "consistent-return": "off",
         "no-nested-ternary": "off",
-        "react/jsx-no-useless-fragment": "off"
+        "react/jsx-no-useless-fragment": "off",
+        "no-unused-vars": "off",
+        "@typescript-eslint/no-unused-vars": ["error"]
     }
 }
