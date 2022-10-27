@@ -2,6 +2,8 @@ const actions = {
   init: 'INIT',
   addCampaign: 'ADD_CAMPAIGN',
   donateFunds: 'DONATE_FUNDS',
+  refundFunds: 'REFUND_FUNDS',
+  claimFunds: 'CLAIM_FUNDS',
 };
 
 const initialState = {
@@ -22,7 +24,32 @@ const reducer = (state, action) => {
       return {
         ...state,
         campaigns: state.campaigns.map((campaign) => (campaign.id === data.id
-          ? { ...campaign, alreadyDonated: campaign.alreadyDonated + data.donatedAmount }
+          ? {
+            ...campaign,
+            alreadyDonated: campaign.alreadyDonated + data.donatedAmount,
+            currentUserDonations: campaign.currentUserDonations + data.donatedAmount,
+          }
+          : campaign)),
+      };
+    case actions.refundFunds:
+      return {
+        ...state,
+        campaigns: state.campaigns.map((campaign) => (campaign.id === data.id
+          ? {
+            ...campaign,
+            alreadyDonated: campaign.alreadyDonated - data.currentUserDonations,
+            currentUserDonations: campaign.currentUserDonations - data.currentUserDonations,
+          }
+          : campaign)),
+      };
+    case actions.claimFunds:
+      return {
+        ...state,
+        campaigns: state.campaigns.map((campaign) => (campaign.id === data.id
+          ? {
+            ...campaign,
+            claimed: true,
+          }
           : campaign)),
       };
     case actions.addCampaign:
