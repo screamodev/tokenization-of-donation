@@ -16,11 +16,11 @@ contract NftReward is ERC721, ERC721URIStorage {
     constructor(string memory tokenName, string memory tokenSymbol) ERC721(tokenName, tokenSymbol) {}
 
     function _baseURI() internal pure override returns (string memory) {
-        return "https://gateway.pinata.cloud/ipfs/";
+        return process.env.PINATA_IPFS;
     }
 
     function safeMint(address to, string memory uri) public {
-        require(!isUserHaveNft[to], "Sorry, you can't own more than one token");
+        require(!isUserHaveNft[to], "You can't own more than one token");
 
         uint256 tokenId = _tokenIdCounter.current();
         _tokenIdCounter.increment();

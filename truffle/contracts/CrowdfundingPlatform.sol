@@ -16,8 +16,6 @@ contract CrowdfundingPlatform {
     uint public campaignsCount;
     address public owner;
 
-    uint constant CAMPAIGN_DURATION_SIXTY = 60 days;
-
     event CampaignStarted(uint id, Campaign newCampaignAddress, uint endsAt, uint goal, address organizer);
 
     function startCampaign(
@@ -29,8 +27,7 @@ contract CrowdfundingPlatform {
         uint _goal,
         uint _endsAt
     ) external {
-        require(_endsAt > block.timestamp);
-        require(_endsAt <= block.timestamp + CAMPAIGN_DURATION_SIXTY);
+        require(_endsAt > block.timestamp, "Campaign duration can't be earlier than now.");
         require(_goal > 0, "You must define goal of your campaign.");
 
         campaignsCount = campaignsCount + 1;
@@ -48,7 +45,7 @@ contract CrowdfundingPlatform {
     function onClaimed(uint id) external {
         CrowdfundingCampaign storage targetCampaign = campaigns[id];
 
-        require(msg.sender == address(targetCampaign.targetContract));
+        require(msg.sender == address(targetCampaign.targetContract), "It is not required campaign.");
 
         targetCampaign.claimed = true;
     }
