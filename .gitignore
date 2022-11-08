@@ -3,4 +3,6 @@ truffle/node_modules
 
 client/src/contracts
 
+truffle/.env
+
 .idea
