@@ -18,8 +18,8 @@ contract Campaign {
     bool public claimed;
     mapping(address => uint) public donations;
 
-    event donated(uint amount, address donater, NftReward nftReward);
-    event refundedAmount(uint amount, address refunder);
+    event Donated(uint amount, address donater, NftReward nftReward);
+    event RefundedAmount(uint amount, address refunder);
 
     constructor(
         uint _id,
@@ -44,41 +44,36 @@ contract Campaign {
     }
 
     function donate() external payable {
-        require(block.timestamp <= endsAt);
-        require(msg.value > 0);
+        require(block.timestamp <= endsAt, "Campaign already has over.");
+        require(msg.value > 0, "You can't donate 0.");
 
         alreadyDonated += msg.value;
         donations[msg.sender] += msg.value;
 
         if (!nftReward.getIsUserHaveNft(msg.sender) && msg.value >= nftReward.NFT_PRICE()) {
             nftReward.safeMint(msg.sender, nftMetaCID);
-            parentContract.setDonaterNft(msg.sender, nftReward, nftReward.getUserTokenId(msg.sender));
+            parentContract.setDonaterNft(msg.sender, nftReward);
         }
 
-        emit donated(msg.value, msg.sender, nftReward);
+        emit Donated(msg.value, msg.sender, nftReward);
     }
 
     function refundDonation(uint _amount) external {
-        require(block.timestamp <= endsAt);
-        require(_amount <= donations[msg.sender]);
-
-        if (nftReward.getIsUserHaveNft(msg.sender) && donations[msg.sender] - _amount < nftReward.NFT_PRICE()) {
-            nftReward.burn(msg.sender, nftReward.getUserTokenId(msg.sender));
-            parentContract.removeDonaterNft(msg.sender, nftReward.getUserTokenId(msg.sender));
-        }
+        require(block.timestamp <= endsAt, "Campaign already has over.");
+        require(_amount <= donations[msg.sender], "you cant refund more than you gave.");
 
         donations[msg.sender] -= _amount;
         alreadyDonated -= _amount;
 
         payable(msg.sender).transfer(_amount);
 
-        emit refundedAmount(_amount, msg.sender);
+        emit RefundedAmount(_amount, msg.sender);
     }
 
     function claim() external {
-        require(msg.sender == organizer);
-        require(alreadyDonated >= goal);
-        require(!claimed);
+        require(msg.sender == organizer, "You are not the organizer.");
+        require(alreadyDonated >= goal, "Not enough funds.");
+        require(!claimed, "Campaign already has claimed.");
 
         claimed = true;
 

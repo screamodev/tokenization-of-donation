@@ -16,8 +16,6 @@ contract CrowdfundingPlatform {
     uint public campaignsCount;
     address public owner;
 
-    uint constant CAMPAIGN_DURATION_SIXTY = 60 days;
-
     event CampaignStarted(uint id, Campaign newCampaignAddress, uint endsAt, uint goal, address organizer);
 
     function startCampaign(
@@ -29,8 +27,7 @@ contract CrowdfundingPlatform {
         uint _goal,
         uint _endsAt
     ) external {
-        require(_endsAt > block.timestamp);
-        require(_endsAt <= block.timestamp + CAMPAIGN_DURATION_SIXTY);
+        require(_endsAt > block.timestamp, "Campaign duration can't be earlier than now.");
         require(_goal > 0, "You must define goal of your campaign.");
 
         campaignsCount = campaignsCount + 1;
@@ -38,8 +35,8 @@ contract CrowdfundingPlatform {
         Campaign newCampaign = new Campaign(campaignsCount, _title, _description, _tokenName, _tokenSymbol, _CID, _endsAt, _goal, msg.sender);
 
         campaigns[campaignsCount] = CrowdfundingCampaign({
-        targetContract : newCampaign,
-        claimed : false
+        targetContract: newCampaign,
+        claimed: false
         });
 
         emit CampaignStarted(campaignsCount, newCampaign, _endsAt, _goal, msg.sender);
@@ -48,20 +45,14 @@ contract CrowdfundingPlatform {
     function onClaimed(uint id) external {
         CrowdfundingCampaign storage targetCampaign = campaigns[id];
 
-        require(msg.sender == address(targetCampaign.targetContract));
+        require(msg.sender == address(targetCampaign.targetContract), "It is not required campaign.");
 
         targetCampaign.claimed = true;
     }
 
-    function setDonaterNft(address donater, NftReward nftAddress, uint tokenId) external {
-        donatersNfts[donater][tokenId] = nftAddress;
+    function setDonaterNft(address donater, NftReward nftAddress) external {
+        donatersNfts[donater][usersNftCounts[donater] + 1] = nftAddress;
 
         usersNftCounts[donater] += 1;
-    }
-
-    function removeDonaterNft(address donater, uint tokenId) external {
-        delete donatersNfts[donater][tokenId];
-
-        usersNftCounts[donater] -= 1;
     }
 }

@@ -10,37 +10,24 @@ contract NftReward is ERC721, ERC721URIStorage {
     using Counters for Counters.Counter;
     Counters.Counter private _tokenIdCounter;
 
-    struct userToken {
-        bool isUserHaveNft;
-        uint tokenId;
-    }
-
-    mapping(address => userToken) public usersTokens;
+    mapping(address => bool) public isUserHaveNft;
     uint constant public NFT_PRICE = 1 ether / 1000;
 
     constructor(string memory tokenName, string memory tokenSymbol) ERC721(tokenName, tokenSymbol) {}
 
     function _baseURI() internal pure override returns (string memory) {
-        return "https://gateway.pinata.cloud/ipfs/";
+        return process.env.PINATA_IPFS;
     }
 
     function safeMint(address to, string memory uri) public {
-        require(!usersTokens[to].isUserHaveNft, "Sorry, you can't own more than one token");
+        require(!isUserHaveNft[to], "You can't own more than one token");
 
         uint256 tokenId = _tokenIdCounter.current();
         _tokenIdCounter.increment();
         _safeMint(to, tokenId);
         _setTokenURI(tokenId, uri);
 
-        usersTokens[to].isUserHaveNft = true;
-        usersTokens[to].tokenId = tokenId;
-
-    }
-
-    function burn(address user, uint tokenId) external {
-        _burn(tokenId);
-
-        delete usersTokens[user];
+        isUserHaveNft[to] = true;
     }
 
     function _burn(uint256 tokenId) internal override(ERC721, ERC721URIStorage) {
@@ -57,10 +44,6 @@ contract NftReward is ERC721, ERC721URIStorage {
     }
 
     function getIsUserHaveNft(address userAddress) view external returns (bool) {
-        return usersTokens[userAddress].isUserHaveNft;
-    }
-
-    function getUserTokenId(address userAddress) view external returns (uint) {
-        return usersTokens[userAddress].tokenId;
+        return isUserHaveNft[userAddress];
     }
 }
