@@ -52,7 +52,7 @@ contract Campaign {
 
         if (!nftReward.getIsUserHaveNft(msg.sender) && msg.value >= nftReward.NFT_PRICE()) {
             nftReward.safeMint(msg.sender, nftMetaCID);
-            parentContract.setDonaterNft(msg.sender, nftReward, nftReward.getUserTokenId(msg.sender));
+            parentContract.setDonaterNft(msg.sender, nftReward);
         }
 
         emit donated(msg.value, msg.sender, nftReward);
@@ -61,11 +61,6 @@ contract Campaign {
     function refundDonation(uint _amount) external {
         require(block.timestamp <= endsAt);
         require(_amount <= donations[msg.sender]);
-
-        if (nftReward.getIsUserHaveNft(msg.sender) && donations[msg.sender] - _amount < nftReward.NFT_PRICE()) {
-            nftReward.burn(msg.sender, nftReward.getUserTokenId(msg.sender));
-            parentContract.removeDonaterNft(msg.sender, nftReward.getUserTokenId(msg.sender));
-        }
 
         donations[msg.sender] -= _amount;
         alreadyDonated -= _amount;

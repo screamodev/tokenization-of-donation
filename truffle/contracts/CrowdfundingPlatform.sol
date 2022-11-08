@@ -38,8 +38,8 @@ contract CrowdfundingPlatform {
         Campaign newCampaign = new Campaign(campaignsCount, _title, _description, _tokenName, _tokenSymbol, _CID, _endsAt, _goal, msg.sender);
 
         campaigns[campaignsCount] = CrowdfundingCampaign({
-        targetContract : newCampaign,
-        claimed : false
+        targetContract: newCampaign,
+        claimed: false
         });
 
         emit CampaignStarted(campaignsCount, newCampaign, _endsAt, _goal, msg.sender);
@@ -53,15 +53,9 @@ contract CrowdfundingPlatform {
         targetCampaign.claimed = true;
     }
 
-    function setDonaterNft(address donater, NftReward nftAddress, uint tokenId) external {
-        donatersNfts[donater][tokenId] = nftAddress;
+    function setDonaterNft(address donater, NftReward nftAddress) external {
+        donatersNfts[donater][usersNftCounts[donater] + 1] = nftAddress;
 
         usersNftCounts[donater] += 1;
-    }
-
-    function removeDonaterNft(address donater, uint tokenId) external {
-        delete donatersNfts[donater][tokenId];
-
-        usersNftCounts[donater] -= 1;
     }
 }
