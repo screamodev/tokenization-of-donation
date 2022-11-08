@@ -37,6 +37,7 @@
         "no-nested-ternary": "off",
         "react/jsx-no-useless-fragment": "off",
         "no-unused-vars": "off",
-        "@typescript-eslint/no-unused-vars": ["error"]
+        "@typescript-eslint/no-unused-vars": ["error"],
+        "react/no-array-index-key": "off"
     }
 }

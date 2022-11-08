@@ -4,15 +4,19 @@ const actions = {
   donateFunds: 'DONATE_FUNDS',
   refundFunds: 'REFUND_FUNDS',
   claimFunds: 'CLAIM_FUNDS',
+  addNft: 'ADD_NFT',
 };
 
 const initialState = {
   web3: null,
   campaignAbi: null,
+  nftRewardAbi: null,
   isMetamaskInstalled: false,
   userAccount: null,
   crowdfundingPlatformInstance: null,
   campaigns: [],
+  userNfts: [],
+  userNftAddresses: [],
 };
 
 const reducer = (state, action) => {
@@ -30,6 +34,12 @@ const reducer = (state, action) => {
             currentUserDonations: campaign.currentUserDonations + data.donatedAmount,
           }
           : campaign)),
+      };
+    case actions.addNft:
+      return {
+        ...state,
+        userNfts: [...state.userNfts, data.nft],
+        userNftAddresses: [...state.userNftAddresses, data.nftReward],
       };
     case actions.refundFunds:
       return {

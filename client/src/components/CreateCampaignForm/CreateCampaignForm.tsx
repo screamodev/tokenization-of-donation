@@ -24,18 +24,32 @@ export const CreateCampaignForm: FC = () => {
       description: '',
       campaignDuration: '2592000',
       requiredAmount: '1',
+      tokenName: '',
+      tokenSymbol: '',
+      CID: '',
     },
     onSubmit: async ({
       title,
       description,
       campaignDuration,
       requiredAmount,
+      tokenName,
+      tokenSymbol,
+      CID,
     }) => {
       const endAt = Math.floor(Date.now() / 1000) + +campaignDuration;
       const ethToWei = web3.utils.toWei(`${requiredAmount}`, 'ether');
 
       await crowdfundingPlatformInstance.methods
-        .startCampaign(title, description, ethToWei, endAt).send({ from: userAccount })
+        .startCampaign(
+          title,
+          description,
+          tokenName,
+          tokenSymbol,
+          CID,
+          ethToWei,
+          endAt,
+        ).send({ from: userAccount })
         .then(async ({ events: { CampaignStarted: { returnValues } } }: any) => {
           const campaign = await filterCampaignInstance(
             web3,
@@ -105,6 +119,42 @@ export const CreateCampaignForm: FC = () => {
             type="number"
             onChange={formik.handleChange}
             value={formik.values.requiredAmount}
+          />
+        </label>
+
+        <hr />
+
+        <h2>Nft reward data</h2>
+
+        <label htmlFor="tokenName">
+          Enter name and symbol of your nft token.
+          <input
+            id="tokenName"
+            placeholder="Name"
+            name="tokenName"
+            type="text"
+            onChange={formik.handleChange}
+            value={formik.values.tokenName}
+          />
+          <input
+            id="tokenSymbol"
+            placeholder="Symbol"
+            name="tokenSymbol"
+            type="text"
+            onChange={formik.handleChange}
+            value={formik.values.tokenSymbol}
+          />
+        </label>
+
+        <label htmlFor="nftMeta">
+          Enter you nft metadata json CID.
+          <input
+            id="nftMeta"
+            placeholder="CID"
+            name="CID"
+            type="text"
+            onChange={formik.handleChange}
+            value={formik.values.CID}
           />
         </label>
 

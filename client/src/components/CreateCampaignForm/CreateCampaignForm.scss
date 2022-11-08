@@ -6,7 +6,15 @@
   }
 
   form {
-    @apply flex flex-col p-8 w-full;
+    @apply flex flex-col justify-center p-8 w-full;
+
+    hr {
+      @apply mx-6 my-8;
+    }
+
+    h2 {
+      @apply text-2xl mb-4 text-center;
+    }
 
     label {
       @apply flex flex-col text-lg p-2;

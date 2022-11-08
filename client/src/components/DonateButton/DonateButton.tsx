@@ -1,6 +1,8 @@
 import React, { FC, useState } from 'react';
 import useEth from '../../contexts/EthContext/useEth';
 import { actions } from '../../contexts/EthContext';
+import { filterNftInstance } from '../../contexts/EthContext/helpers/helpers';
+import { NFT_PRICE } from '../../constants/constansts';
 import './donateButton.scss';
 
 interface DonateButtonProps {
@@ -15,6 +17,8 @@ export const DonateButton: FC<DonateButtonProps> = ({
   const {
     state: {
       web3,
+      nftRewardAbi,
+      userNftAddresses,
       userAccount,
     }, dispatch,
   } = useEth();
@@ -33,15 +37,25 @@ export const DonateButton: FC<DonateButtonProps> = ({
   };
 
   const handleSendDonation = async (value: number) => {
-    await donate().send({ from: userAccount, value: web3.utils.toWei(`${value}`, 'ether') })
-      .then(({ events: { donated: { returnValues } } }: any) => {
-        const donatedAmount = +web3.utils.fromWei(returnValues[0], 'ether');
+    const valueInWei = web3.utils.toWei(`${value}`, 'ether');
+
+    await donate().send({ from: userAccount, value: valueInWei })
+      .then(async ({ events: { donated: { returnValues: { amount, nftReward } } } }: any) => {
+        const donatedAmount = +web3.utils.fromWei(amount, 'ether');
         const fixedAmount = +donatedAmount.toFixed(3);
 
         dispatch({
           type: actions.donateFunds,
           data: { id, donatedAmount: fixedAmount },
         });
+
+        if (+valueInWei >= NFT_PRICE && !userNftAddresses.includes(nftReward)) {
+          const nft = await filterNftInstance(web3, nftRewardAbi, nftReward);
+          dispatch({
+            type: actions.addNft,
+            data: { nft, nftReward },
+          });
+        }
       });
   };
 

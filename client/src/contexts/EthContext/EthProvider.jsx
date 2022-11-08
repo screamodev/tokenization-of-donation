@@ -4,29 +4,66 @@ import React, {
 import Web3 from 'web3';
 import { reducer, actions, initialState } from './state';
 import EthContext from './EthContext';
-import { filterCampaignInstance, getCampaignsAddresses } from './helpers/helpers';
+import {
+  filterCampaignInstance,
+  filterNftInstance,
+  getCampaignsAddresses,
+  getNftsAddresses,
+} from './helpers/helpers';
 
 const CrowdfundingPlatform = require('../../contracts/CrowdfundingPlatform.json');
 const CampaignContract = require('../../contracts/Campaign.json');
+const NftReward = require('../../contracts/NftReward.json');
 
 function EthProvider({ children }) {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const init = useCallback(async () => {
-    if (CrowdfundingPlatform && CampaignContract) {
+    if (CrowdfundingPlatform && CampaignContract && NftReward) {
       const web3 = new Web3(Web3.givenProvider || 'http://localhost:7545');
       const accounts = await web3.eth.requestAccounts();
       const networkID = await web3.eth.net.getId();
 
       const { abi } = CrowdfundingPlatform;
       const { abi: campaignAbi } = CampaignContract;
+      const { abi: nftRewardAbi } = NftReward;
 
       const { address } = CrowdfundingPlatform.networks[networkID];
+
+      console.log(address, 'this');
 
       const crowdfundingPlatformInstance = new web3.eth.Contract(abi, address);
 
       const campaignsCount = await crowdfundingPlatformInstance
         .methods.campaignsCount().call();
+
+      const userNftCount = await crowdfundingPlatformInstance
+        .methods.usersNftCounts(accounts[0]).call();
+
+      const { userNfts, userNftAddresses } = await (async function () {
+        if (!userNftCount) {
+          return [];
+        }
+
+        const nftsAdresses = await getNftsAddresses(
+          crowdfundingPlatformInstance,
+          accounts[0],
+          userNftCount,
+        );
+
+        const nftsPending = nftsAdresses
+          .map((nftAddress) => filterNftInstance(
+            web3,
+            nftRewardAbi,
+            nftAddress,
+          ));
+
+        const nftsPromisses = await Promise.all(nftsPending);
+
+        return { userNfts: nftsPromisses, userNftAddresses: nftsAdresses };
+      }());
+
+      console.log(userNfts);
 
       const campaigns = await (async function () {
         if (!campaignsCount) {
@@ -58,9 +95,12 @@ function EthProvider({ children }) {
         data: {
           web3,
           campaignAbi,
+          nftRewardAbi,
           userAccount: accounts[0],
           crowdfundingPlatformInstance,
           campaigns,
+          userNfts,
+          userNftAddresses,
         },
       });
     }

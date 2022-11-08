@@ -12,3 +12,9 @@ export interface Campaign {
     refundDonation: () => any;
     claim: () => any;
 }
+
+export interface NftItem {
+    name: string;
+    image: string;
+    description: string;
+}
