@@ -25,6 +25,7 @@ export const Header: FC = () => {
         <Link to="/" className="header-navbar-item">Home</Link>
         <Link to="/create-campaign" className="header-navbar-item">Create Campaign</Link>
         <Link to="/about" className="header-navbar-item">About</Link>
+        <Link to="/my-rewards" className="header-navbar-item">My rewards</Link>
       </nav>
 
       <div className="header-authorization">
