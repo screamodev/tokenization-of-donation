@@ -1,0 +1,19 @@
+.nft-reward-item {
+  @apply flex flex-col justify-between rounded shadow text-center bg-neutral-800 overflow-hidden hover:opacity-90 duration-150 cursor-pointer;
+
+  &-image {
+    @apply h-5/6 overflow-hidden;
+  }
+
+  &-text {
+    @apply p-4 text-left;
+
+    &-name {
+      @apply text-xl mb-2;
+    }
+
+    &-description {
+      @apply text-sm text-gray-400 opacity-50 mt-2;
+    }
+  }
+}
