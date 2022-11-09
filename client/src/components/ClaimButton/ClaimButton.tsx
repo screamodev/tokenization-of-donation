@@ -16,7 +16,6 @@ export const ClaimButton: FC<ClaimButtonProps> = ({
 }) => {
   const {
     state: {
-      web3,
       userAccount,
     }, dispatch,
   } = useEth();
