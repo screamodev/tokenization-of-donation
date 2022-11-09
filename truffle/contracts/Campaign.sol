@@ -28,6 +28,7 @@ contract Campaign {
         string memory _tokenName,
         string memory _tokenSymbol,
         string memory _CID,
+        string memory _baseUrl,
         uint _endsAt,
         uint _goal,
         address _organizer
@@ -40,7 +41,7 @@ contract Campaign {
         goal = _goal;
         organizer = _organizer;
         parentContract = CrowdfundingPlatform(msg.sender);
-        nftReward = new NftReward(_tokenName, _tokenSymbol);
+        nftReward = new NftReward(_tokenName, _tokenSymbol, _baseUrl);
     }
 
     function donate() external payable {

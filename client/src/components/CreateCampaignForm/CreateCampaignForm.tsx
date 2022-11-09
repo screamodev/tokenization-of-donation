@@ -39,6 +39,7 @@ export const CreateCampaignForm: FC = () => {
     }) => {
       const endAt = Math.floor(Date.now() / 1000) + +campaignDuration;
       const ethToWei = web3.utils.toWei(`${requiredAmount}`, 'ether');
+      const BASE_URL = process.env.REACT_APP_PINATA_IPFS;
 
       await crowdfundingPlatformInstance.methods
         .startCampaign(
@@ -47,6 +48,7 @@ export const CreateCampaignForm: FC = () => {
           tokenName,
           tokenSymbol,
           CID,
+          BASE_URL,
           ethToWei,
           endAt,
         ).send({ from: userAccount })

@@ -24,6 +24,7 @@ contract CrowdfundingPlatform {
         string memory _tokenName,
         string memory _tokenSymbol,
         string memory _CID,
+        string memory _baseUrl,
         uint _goal,
         uint _endsAt
     ) external {
@@ -32,7 +33,7 @@ contract CrowdfundingPlatform {
 
         campaignsCount = campaignsCount + 1;
 
-        Campaign newCampaign = new Campaign(campaignsCount, _title, _description, _tokenName, _tokenSymbol, _CID, _endsAt, _goal, msg.sender);
+        Campaign newCampaign = new Campaign(campaignsCount, _title, _description, _tokenName, _tokenSymbol, _CID, _baseUrl, _endsAt, _goal, msg.sender);
 
         campaigns[campaignsCount] = CrowdfundingCampaign({
         targetContract: newCampaign,

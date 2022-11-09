@@ -12,11 +12,14 @@ contract NftReward is ERC721, ERC721URIStorage {
 
     mapping(address => bool) public isUserHaveNft;
     uint constant public NFT_PRICE = 1 ether / 1000;
+    string public baseUrl;
 
-    constructor(string memory tokenName, string memory tokenSymbol) ERC721(tokenName, tokenSymbol) {}
+    constructor(string memory _tokenName, string memory _tokenSymbol, string memory _baseUrl) ERC721(_tokenName, _tokenSymbol) {
+        baseUrl = _baseUrl;
+    }
 
-    function _baseURI() internal pure override returns (string memory) {
-        return process.env.PINATA_IPFS;
+    function _baseURI() internal view override returns (string memory) {
+        return baseUrl;
     }
 
     function safeMint(address to, string memory uri) public {

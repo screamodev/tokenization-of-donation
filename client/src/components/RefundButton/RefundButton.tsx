@@ -35,7 +35,7 @@ export const RefundButton: FC<RefundButtonProps> = ({
 
   const handleSendDonation = async (value: number) => {
     await refundDonation(web3.utils.toWei(`${value}`, 'ether')).send({ from: userAccount })
-      .then(({ events: { refundedAmount: { returnValues } } }: any) => {
+      .then(({ events: { RefundedAmount: { returnValues } } }: any) => {
         const refundedAmount = +web3.utils.fromWei(returnValues[0], 'ether');
         console.log(refundedAmount);
         dispatch({
