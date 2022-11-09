@@ -40,7 +40,7 @@ export const DonateButton: FC<DonateButtonProps> = ({
     const valueInWei = web3.utils.toWei(`${value}`, 'ether');
 
     await donate().send({ from: userAccount, value: valueInWei })
-      .then(async ({ events: { donated: { returnValues: { amount, nftReward } } } }: any) => {
+      .then(async ({ events: { Donated: { returnValues: { amount, nftReward } } } }: any) => {
         const donatedAmount = +web3.utils.fromWei(amount, 'ether');
         const fixedAmount = +donatedAmount.toFixed(3);
 
