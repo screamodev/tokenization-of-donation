@@ -53,7 +53,7 @@ export const CampaignElement: FC<CampaignElementProps> = ({
         </div>
       </div>
       {claimed
-        ? <div>Campaign Over. Organizer withdrowed the funds. </div>
+        ? <div>Campaign over. Organizer has withdrowed funds. </div>
         : <DonateButton id={id} donate={donate} />}
     </div>
   );

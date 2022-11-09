@@ -6,8 +6,8 @@ import { DonateButton } from '../DonateButton/DonateButton';
 import { Campaign } from '../../interfaces/interface';
 import { convertSecondsToDays } from '../../utils/utils';
 import { RefundButton } from '../RefundButton/RefundButton';
-import './campaignInfo.scss';
 import { ClaimButton } from '../ClaimButton/ClaimButton';
+import './campaignInfo.scss';
 
 const initialCampaign = {
   id: 0,
@@ -89,7 +89,7 @@ export const CampaignInfo: FC = () => {
                   {`${convertSecondsToDays(endsAt)} days to go`}
                 </div>
                 {claimed
-                  ? <div>Campaign Over. Organizer withdrowed the funds. </div>
+                  ? <div>Campaign over. Organizer has withdrowed funds.</div>
                   : (
                     <div className="campaign-info-container-content-info-details-buttons">
                       <DonateButton
