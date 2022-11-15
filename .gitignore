@@ -1,0 +1,9 @@
+client/node_modules
+truffle/node_modules
+
+client/src/contracts
+
+client/.env
+truffle/.env
+
+.idea
