@@ -10,7 +10,7 @@ import { CreateCampaignPage } from '../../pages/CreateCampaignPage/CreateCampaig
 import { AboutPage } from '../../pages/AboutPage/AboutPage';
 import { CampaignPage } from '../../pages/CampaignPage/CampaignPage';
 import { MyNftRewardsPage } from '../../pages/MyNftRewardsPage/MyNftRewardsPage';
-import {MyCampaignsPage} from "../../pages/MyCampaignsPage/MyCampaignsPage";
+import { MyCampaignsPage } from '../../pages/MyCampaignsPage/MyCampaignsPage';
 
 export const App: FC = () => (
   <EthProvider>
