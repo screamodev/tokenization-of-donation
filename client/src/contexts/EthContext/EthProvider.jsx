@@ -30,8 +30,6 @@ function EthProvider({ children }) {
 
       const { address } = CrowdfundingPlatform.networks[networkID];
 
-      console.log(address, 'this');
-
       const crowdfundingPlatformInstance = new web3.eth.Contract(abi, address);
 
       const campaignsCount = await crowdfundingPlatformInstance
@@ -63,8 +61,6 @@ function EthProvider({ children }) {
         return { userNfts: nftsPromisses, userNftAddresses: nftsAdresses };
       }());
 
-      console.log(userNfts);
-
       const campaigns = await (async function () {
         if (!campaignsCount) {
           return [];
@@ -87,8 +83,6 @@ function EthProvider({ children }) {
 
         return campaignsPromisses;
       }());
-
-      console.log(campaigns);
 
       dispatch({
         type: actions.init,
