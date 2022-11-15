@@ -24,8 +24,9 @@ export const Header: FC = () => {
       <nav className="header-navbar">
         <Link to="/" className="header-navbar-item">Home</Link>
         <Link to="/create-campaign" className="header-navbar-item">Create Campaign</Link>
-        <Link to="/about" className="header-navbar-item">About</Link>
+        <Link to="/my-campaigns" className="header-navbar-item">My Campaigns</Link>
         <Link to="/my-rewards" className="header-navbar-item">My rewards</Link>
+        <Link to="/about" className="header-navbar-item">About</Link>
       </nav>
 
       <div className="header-authorization">
