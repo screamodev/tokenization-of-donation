@@ -96,6 +96,7 @@ function EthProvider({ children }) {
           web3,
           campaignAbi,
           nftRewardAbi,
+          isLoading: false,
           userAccount: accounts[0],
           crowdfundingPlatformInstance,
           campaigns,

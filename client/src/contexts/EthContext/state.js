@@ -11,6 +11,7 @@ const initialState = {
   web3: null,
   campaignAbi: null,
   nftRewardAbi: null,
+  isLoading: true,
   isMetamaskInstalled: false,
   userAccount: null,
   crowdfundingPlatformInstance: null,

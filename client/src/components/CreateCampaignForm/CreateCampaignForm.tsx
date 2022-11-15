@@ -26,6 +26,7 @@ export const CreateCampaignForm: FC = () => {
       requiredAmount: '1',
       tokenName: '',
       tokenSymbol: '',
+      metaDataName: '',
       CID: '',
     },
     onSubmit: async ({
@@ -149,7 +150,9 @@ export const CreateCampaignForm: FC = () => {
         </label>
 
         <label htmlFor="nftMeta">
-          Enter you nft metadata json CID.
+          Enter your metadata json CID from
+          <a href="https://www.pinata.cloud/"><b>pinata.cloud</b></a>
+          is must contain: name, description and image CID.
           <input
             id="nftMeta"
             placeholder="CID"
@@ -159,7 +162,6 @@ export const CreateCampaignForm: FC = () => {
             value={formik.values.CID}
           />
         </label>
-
         <button className="form-button" type="submit">Submit</button>
       </form>
     </div>

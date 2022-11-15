@@ -55,6 +55,7 @@ export const DonateButton: FC<DonateButtonProps> = ({
             type: actions.addNft,
             data: { nft, nftReward },
           });
+          alert("You've got NFT! Check your rewards.");
         }
       });
   };
