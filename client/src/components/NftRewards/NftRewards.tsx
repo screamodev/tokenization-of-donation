@@ -10,7 +10,7 @@ export const NftRewards: FC = () => {
   return (
     <>
       {!userNfts.length
-        ? (<span>Loading...</span>)
+        ? (<span>You don&#39;t have rewards.</span>)
         : (
           <div className="rewards-container">
             {userNfts.map(({

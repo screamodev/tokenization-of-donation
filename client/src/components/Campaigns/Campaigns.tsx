@@ -5,38 +5,42 @@ import { CampaignElement } from './CampaignElement/CampaignElement';
 import './campaigns.scss';
 
 export const Campaigns: FC = () => {
-  const { state: { campaigns } } = useEth();
+  const { state: { campaigns, isLoading, userAccount } } = useEth();
 
   return (
     <>
-      {!campaigns.length
-        ? (<span>Loading...</span>)
-        : (
-          <div className="campaigns-container">
-            {campaigns.map(({
-              id,
-              title,
-              description,
-              goal,
-              alreadyDonated,
-              claimed,
-              endsAt,
-              donate,
-            }: Campaign) => (
-              <CampaignElement
-                id={id}
-                key={id}
-                title={title}
-                description={description}
-                goal={goal}
-                alreadyDonated={alreadyDonated}
-                claimed={claimed}
-                endsAt={endsAt}
-                donate={donate}
-              />
-            ))}
-          </div>
-        )}
+      {userAccount
+        ? !isLoading
+          ? !campaigns.length
+            ? (<span>Campaigns are empty.</span>)
+            : (
+              <div className="campaigns-container">
+                {campaigns.map(({
+                  id,
+                  title,
+                  description,
+                  goal,
+                  alreadyDonated,
+                  claimed,
+                  endsAt,
+                  donate,
+                }: Campaign) => (
+                  <CampaignElement
+                    id={id}
+                    key={id}
+                    title={title}
+                    description={description}
+                    goal={goal}
+                    alreadyDonated={alreadyDonated}
+                    claimed={claimed}
+                    endsAt={endsAt}
+                    donate={donate}
+                  />
+                ))}
+              </div>
+            )
+          : (<span>Loading...</span>)
+        : (<span>You should login using metamask</span>)}
     </>
   );
 };
